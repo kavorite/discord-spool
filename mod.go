@@ -31,13 +31,18 @@ func (spl *T) Unroll(s *dgo.Session, iter func(*dgo.Message) bool) (err error) {
 		if err != nil {
 			return
 		}
+		if len(msgs) > 0 {
+			tail := Head(msgs[len(msgs)-1].ID)
+			if spl.Head == tail {
+				msgs = msgs[:0]
+			} else {
+				spl.Head = Head(msgs[len(msgs)-1].ID)
+			}
+		}
 		for _, msg := range msgs {
 			if !iter(msg) {
 				return
 			}
-		}
-		if len(msgs) > 0 {
-			spl.Head = Head(msgs[len(msgs)-1].ID)
 		}
 		if len(msgs) < 100 {
 			err = io.EOF
