@@ -36,7 +36,9 @@ func (spl *T) Unroll(s *dgo.Session, iter func(*dgo.Message) bool) (err error) {
 				return
 			}
 		}
-		spl.Head = Head(msgs[len(msgs)-1].ID)
+		if len(msgs) > 0 {
+			spl.Head = Head(msgs[len(msgs)-1].ID)
+		}
 		if len(msgs) < 100 {
 			err = io.EOF
 			return
